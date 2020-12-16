@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, FormEventHandler, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import axios from 'axios';
 
 import './ConversorMoedas.css';
 
@@ -15,14 +16,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import ListarMoedas from './ListarMoedas';
 
+// type TRates = {
+//   sigla: string,
+//   valor: number,
+// }
+
+// type TDadosFixed = {
+//   success: boolean,
+//   rates: TRates,
+// }
+
 const ConversorMoedas = () => {
+
+  const FIXER_URL = 'http://data.fixer.io/api/latest?access_key=0af9ff85fe182a10200c5646755c4a8f';
+
   const [valor, setValor] = useState('');
   const [moedaDe, setMoedaDe] = useState('BRL');
   const [moedaPara, setMoedaPara] = useState('USD');
   const [exibirSpinner, setExibirSpinner] = useState(false);
   const [formValidado, setFormValidado] = useState(false);
   const [exibirModal, setExibirModal] = useState(false);
-  const [resultadoConversao, setResultadoConversao] = useState();
+  const [resultadoConversao, setResultadoConversao] = useState('');
 
   const handleValor = (event: ChangeEvent<HTMLInputElement>) => {
     setValor(event.target.value.replace(/\D/g, ''));
@@ -49,8 +63,34 @@ const ConversorMoedas = () => {
     setFormValidado(true);
 
     if (event.currentTarget.checkValidity() === true) {
-      setExibirModal(true);
+      setExibirSpinner(true);
+
+      axios.get(FIXER_URL).then(response => {
+        const cotacao = obterCotacao(response.data);
+
+        setResultadoConversao(`${valor} ${moedaDe} = ${cotacao} ${moedaPara}`);
+
+        setExibirModal(true);
+        setExibirSpinner(false);
+
+      });
     }
+  };
+
+  const obterCotacao = (dadosCotacao: any) => {
+    if (!dadosCotacao || dadosCotacao.success !== true) {
+      return false;
+    }
+
+    const cotacaoDe = dadosCotacao.rates[moedaDe];
+    console.log('Cotação de ' + cotacaoDe);
+    const cotacaoPara = dadosCotacao.rates[moedaPara];
+    console.log('Cotação para ' + cotacaoPara);
+
+    const cotacao = (1 / cotacaoDe * cotacaoPara) * +valor;
+
+    return cotacao.toFixed(3);
+
   };
 
   return (
