@@ -21,6 +21,8 @@ const ConversorMoedas = () => {
   const [moedaPara, setMoedaPara] = useState('USD');
   const [exibirSpinner, setExibirSpinner] = useState(false);
   const [formValidado, setFormValidado] = useState(false);
+  const [exibirModal, setExibirModal] = useState(false);
+  const [resultadoConversao, setResultadoConversao] = useState();
 
   const handleValor = (event: ChangeEvent<HTMLInputElement>) => {
     setValor(event.target.value.replace(/\D/g, ''));
@@ -34,14 +36,20 @@ const ConversorMoedas = () => {
     setMoedaPara(event.target.value);
   };
 
+  const handleFecharModal = () => {
+    setValor('');
+    setMoedaDe('BRL');
+    setMoedaPara('USD');
+    setFormValidado(false);
+    setExibirModal(false);
+  };
+
   const converter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormValidado(true);
 
     if (event.currentTarget.checkValidity() === true) {
-      alert('Correto');
-    } else {
-      alert('Incorretp');
+      setExibirModal(true);
     }
   };
 
@@ -103,17 +111,22 @@ const ConversorMoedas = () => {
           </Form.Row>
         </Form>
 
-        <Modal show={false}>
+        <Modal show={exibirModal} onHide={handleFecharModal}>
           <Modal.Header closeButton>
             <Modal.Title>Conversão</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            Resultado da conversão aqui...
+            {resultadoConversao}
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="success" >Nova conversão</Button>
+            <Button
+              onClick={handleFecharModal}
+              variant="success"
+            >
+              Nova conversão
+            </Button>
           </Modal.Footer>
         </Modal>
       </Jumbotron>
