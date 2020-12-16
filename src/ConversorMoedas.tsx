@@ -1,6 +1,6 @@
 import './ConversorMoedas.css';
 
-import { Button, Col, Form, Jumbotron, Spinner } from 'react-bootstrap';
+import { Alert, Button, Col, Form, Jumbotron, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,6 +8,9 @@ const ConversorMoedas = () => {
   return (
     <div>
       <h1>Conversor Moedas</h1>
+      <Alert variant="danger" show={false} >
+        Erro obtendo dados de conversão, tente novamente.
+      </Alert>
       <Jumbotron>
         <Form>
           <Form.Row>
