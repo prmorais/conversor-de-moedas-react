@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import './index.css';
-import ConversorMoedas from './ConversorMoedas';
+import ConversorMoedas from './pages/ConversorMoedas';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 

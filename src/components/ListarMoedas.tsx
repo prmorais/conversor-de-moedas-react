@@ -1,4 +1,4 @@
-import MOEDAS from './data/moedas';
+import MOEDAS from '../data/moedas';
 
 type TMoeda = {
   sigla: string,
