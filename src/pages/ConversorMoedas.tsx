@@ -48,18 +48,24 @@ const ConversorMoedas = () => {
       setExibirSpinner(true);
 
       axios.get(URL).then(response => {
-        if (response.data.success) {
-          const cotacao = obterCotacao(response.data);
+        const cotacao = obterCotacao(response.data);
 
+        if (cotacao) {
           setResultadoConversao(`${valor} ${moedaDe} = ${cotacao} ${moedaPara}`);
 
           setExibirModal(true);
           setExibirSpinner(false);
+          setExibirAlert(false);
 
         } else {
           setExibirAlert(true);
+          setExibirSpinner(false);
         }
-      });
+      })
+        .catch(err => {
+          setExibirAlert(true);
+          setExibirSpinner(false);
+        });
     }
   };
 
