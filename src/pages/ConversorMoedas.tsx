@@ -9,7 +9,7 @@ import AlertMoedas from '../components/AlertMoedas';
 
 const ConversorMoedas = () => {
 
-  const FIXER_URL = 'http://data.fixer.io/api/latest?access_key=0af9ff85fe182a10200c5646755c4a8f';
+  const URL = process.env.REACT_APP_FIXER_URL || '';
 
   const [valor, setValor] = useState('');
   const [moedaDe, setMoedaDe] = useState('BRL');
@@ -47,7 +47,7 @@ const ConversorMoedas = () => {
     if (event.currentTarget.checkValidity() === true) {
       setExibirSpinner(true);
 
-      axios.get(FIXER_URL).then(response => {
+      axios.get(URL).then(response => {
         if (response.data.success) {
           const cotacao = obterCotacao(response.data);
 
